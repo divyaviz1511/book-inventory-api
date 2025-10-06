@@ -49,6 +49,14 @@ It supports full CRUD operations and includes validation, custom annotations, an
 
 ---
 
+## 🔗 Frontend Repository
+
+The visual feel of the API is built using **React + Bootstrap + Axios(for Async API)** and can be found here:
+
+👉 [React Book Inventory UI] [https://github.com/divyaviz1511/bookstore-ui-react](https://github.com/divyaviz1511/bookstore-ui-react)
+
+---
+
 ## 🛠️ Setup Instructions
 
 ### ✅ Prerequisites
