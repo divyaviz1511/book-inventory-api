@@ -33,6 +33,6 @@ public class BookDetailsRequest {
     private String language;
 
 
-    @JsonFormat(pattern = "YYYY-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releasedDate;
 }

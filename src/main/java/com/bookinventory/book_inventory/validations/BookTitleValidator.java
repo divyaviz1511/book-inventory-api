@@ -4,7 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class BookTitleValidator implements ConstraintValidator<ValidBookTitle, String>{
-    private String titlePattern = "^[a-zA-Z0-9][a-zA-Z0-9 ',?!]+$";
+    private String titlePattern = "^[a-zA-Z0-9][a-zA-Z0-9 :-',?!]+$";
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {

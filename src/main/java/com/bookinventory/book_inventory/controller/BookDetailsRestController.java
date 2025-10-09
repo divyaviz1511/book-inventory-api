@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,15 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookinventory.book_inventory.dto.BookDetailsRequest;
 import com.bookinventory.book_inventory.dto.BookDetailsResponse;
+import com.bookinventory.book_inventory.dto.filter.SearchRequest;
 import com.bookinventory.book_inventory.service.BookDetailsService;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/book_details")
 public class BookDetailsRestController {
 
     @Autowired
     private BookDetailsService bookDetailsService;
-    
+
     @GetMapping
     public List<BookDetailsResponse> getAllBookDetails() {
         return bookDetailsService.getAllBookDetails();
@@ -53,5 +56,12 @@ public class BookDetailsRestController {
     public ResponseEntity<Void> deleteBookDetailById(@PathVariable int id) {
         bookDetailsService.deleteBookDetailById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<BookDetailsResponse>> searchBasedCriteria(@RequestBody SearchRequest searchRequest) {
+        List<BookDetailsResponse> bookDetailsResponses = bookDetailsService.searchBooksByCriteria(searchRequest);
+        return ResponseEntity.ok(bookDetailsResponses);
+
     }
 }

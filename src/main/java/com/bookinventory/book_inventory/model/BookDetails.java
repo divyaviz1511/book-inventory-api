@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDetails {
+    public static final int  THRESHOLD = 5; 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int book_id;
@@ -33,7 +34,7 @@ public class BookDetails {
 
     private String language;
 
-    private LocalDate released_date;
+    private LocalDate releasedDate;
 
     public BookDetails(String title, String author, BigDecimal price, int quantity, String language, LocalDate releasedDate) {
         this.title = title;
@@ -41,6 +42,6 @@ public class BookDetails {
         this.price = price;
         this.quantity = quantity;
         this.language = language;
-        this.released_date = releasedDate;
+        this.releasedDate = releasedDate;
     }
 }
