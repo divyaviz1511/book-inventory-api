@@ -11,8 +11,11 @@ It supports full CRUD operations and includes validation, custom annotations, an
 - Input validation (including custom validators for title and language)
 - Global exception handling
 - Layered architecture: Controller → Service → Repository → DB
-- RESTful API using Spring Boot
-- Ready for frontend integration (React in progress)
+- **RESTful API** using Spring Boot
+- Search Logic using **JPA Specification** and predicates 
+- **RabbitMQ** Messaging (via CloudAMQP) for low stock alerts.
+- Ready with frontend integration (**React**) (https://github.com/divyaviz1511/bookstore-ui-react)
+
 
 ---
 
@@ -25,6 +28,7 @@ It supports full CRUD operations and includes validation, custom annotations, an
 - MySQL
 - Jakarta Bean Validation
 - Maven
+- RabbitMQ
 
 
 ## 📬 API Endpoints
@@ -36,6 +40,7 @@ It supports full CRUD operations and includes validation, custom annotations, an
 | `POST` | `/api/book_details` | Add new book |
 | `PATCH` | `/api/book_details/{id}` | Update book (partial or full) |
 | `DELETE` | `/api/book_details/{id}` | Delete book by ID |
+| `POST` | `/api/book_details/search` | Book Search by criteria |
 
 ---
 
@@ -88,5 +93,3 @@ mvn spring-boot:run
 
 ## FrontEnd (WIP)
 Frontend will be built using React
-
-Stay tuned 
