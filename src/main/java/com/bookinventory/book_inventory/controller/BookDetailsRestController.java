@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookinventory.book_inventory.dto.BookDetailsRequest;
 import com.bookinventory.book_inventory.dto.BookDetailsResponse;
+import com.bookinventory.book_inventory.dto.alerts.AlertsDTO;
 import com.bookinventory.book_inventory.dto.filter.SearchRequest;
+import com.bookinventory.book_inventory.service.AlertService;
 import com.bookinventory.book_inventory.service.BookDetailsService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -27,6 +29,9 @@ public class BookDetailsRestController {
 
     @Autowired
     private BookDetailsService bookDetailsService;
+
+    @Autowired
+    private AlertService alertService;
 
     @GetMapping
     public List<BookDetailsResponse> getAllBookDetails() {
@@ -63,5 +68,16 @@ public class BookDetailsRestController {
         List<BookDetailsResponse> bookDetailsResponses = bookDetailsService.searchBooksByCriteria(searchRequest);
         return ResponseEntity.ok(bookDetailsResponses);
 
+    }
+
+    @GetMapping("/alerts")
+    public ResponseEntity<List<AlertsDTO>> getAllAlerts() {
+        return ResponseEntity.ok(alertService.getAllAlerts());
+    }
+
+    @GetMapping("/alerts/count")
+    public ResponseEntity<Long> getTotalAlertsCount() {
+        Long count = alertService.getCount();
+        return ResponseEntity.ok(count);
     }
 }
