@@ -64,6 +64,8 @@ public class BookDetailsService {
             }
         }
         if (bookDetailsRequest.getLanguage() != null) bookDetails.setLanguage(bookDetailsRequest.getLanguage());
+        if (bookDetailsRequest.getGenre() != null) bookDetails.setGenre(bookDetailsRequest.getGenre());
+        if (bookDetailsRequest.getPageCount() != null) bookDetails.setPageCount(bookDetails.getPageCount());
         if (bookDetailsRequest.getReleasedDate() != null) bookDetails.setReleasedDate(bookDetailsRequest.getReleasedDate());
 
         bookDetailsRepository.save(bookDetails);
@@ -143,12 +145,26 @@ public class BookDetailsService {
 
     //Conversion functions btw DTO and Entity. 
     private BookDetails getBookDetailsEntityFromBookDetailsRequestDTO(BookDetailsRequest bookDetailsRequest) {
-        return new BookDetails(bookDetailsRequest.getTitle(), bookDetailsRequest.getAuthor(), bookDetailsRequest.getPrice(), bookDetailsRequest.getQuantity(), bookDetailsRequest.getLanguage(), bookDetailsRequest.getReleasedDate());
+        return new BookDetails(bookDetailsRequest.getTitle(), 
+                            bookDetailsRequest.getAuthor(), 
+                            bookDetailsRequest.getPrice(), 
+                            bookDetailsRequest.getQuantity(), 
+                            bookDetailsRequest.getLanguage(),
+                            bookDetailsRequest.getGenre(),
+                            bookDetailsRequest.getPageCount(),
+                            bookDetailsRequest.getReleasedDate());
 
     }
 
     private BookDetailsResponse getBookDetailResponseFromBookDetailEntity(BookDetails bookDetails) {
-        return new BookDetailsResponse(bookDetails.getBook_id(), bookDetails.getTitle(), bookDetails.getAuthor(), 
-            bookDetails.getPrice(), bookDetails.getQuantity(), bookDetails.getLanguage(), bookDetails.getReleasedDate());    
+        return new BookDetailsResponse(bookDetails.getBook_id(), 
+                                    bookDetails.getTitle(), 
+                                    bookDetails.getAuthor(), 
+                                    bookDetails.getPrice(), 
+                                    bookDetails.getQuantity(), 
+                                    bookDetails.getLanguage(), 
+                                    bookDetails.getGenre(),
+                                    bookDetails.getPageCount(),
+                                    bookDetails.getReleasedDate());    
     }
 }

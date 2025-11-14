@@ -19,5 +19,7 @@ public class BookDetailsResponse {
     private BigDecimal price;
     private int quantity;
     private String language;
+    private String genre;
+    private int pageCount;
     private LocalDate releasedDate;
 }

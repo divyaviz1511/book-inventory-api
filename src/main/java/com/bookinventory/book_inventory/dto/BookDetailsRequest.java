@@ -32,7 +32,10 @@ public class BookDetailsRequest {
     @ValidLanguage
     private String language;
 
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releasedDate;
+
+    private Integer pageCount;
+
+    private String genre;
 }
