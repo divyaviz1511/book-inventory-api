@@ -22,4 +22,17 @@ public class BookDetailsResponse {
     private String genre;
     private int pageCount;
     private LocalDate releasedDate;
+    private Double bestSellerProbability;
+
+    public BookDetailsResponse(int id, String title, String author, BigDecimal price, int quantity, String language, String genre, int pageCount, LocalDate releasedDate) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.quantity = quantity;
+        this.language = language;
+        this.genre = genre;
+        this.pageCount = pageCount;
+        this.releasedDate = releasedDate;
+    }
 }

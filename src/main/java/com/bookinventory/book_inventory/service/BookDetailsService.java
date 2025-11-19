@@ -26,13 +26,22 @@ public class BookDetailsService {
 
     @Autowired
     private MessageSender messageSender;
-    
+
+    @Autowired
+    private AIService aiService;
 
     public List<BookDetailsResponse> getAllBookDetails() {
         List<BookDetailsResponse> bookDetailsResponses = new ArrayList<>();
         List<BookDetails> bookDetails = bookDetailsRepository.findAll();
         for(BookDetails bookDetail : bookDetails) {
             bookDetailsResponses.add(this.getBookDetailResponseFromBookDetailEntity(bookDetail));
+        }
+
+        //get probability for the list of books
+        List<Double> prob = aiService.getBestSellerProbabilities(bookDetails);
+
+        for(int i=0; i<bookDetailsResponses.size(); i++) {
+            bookDetailsResponses.get(i).setBestSellerProbability(prob.get(i));
         }
 
         return bookDetailsResponses;

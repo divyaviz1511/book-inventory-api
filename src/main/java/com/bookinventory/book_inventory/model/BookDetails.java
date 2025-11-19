@@ -30,7 +30,7 @@ public class BookDetails {
     private BigDecimal price;
 
     @Column(name = "qty")
-    private int quantity;
+    private Integer quantity;
 
     private String language;
 
