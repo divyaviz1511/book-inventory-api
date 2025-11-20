@@ -1,4 +1,4 @@
-package com.bookinventory.book_inventory.messaging;
+package com.bookinventory.book_inventory.messaging.alerts;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -9,7 +9,7 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 
 @Configuration
-public class RabbitMQConfig {
+public class RabbitMQAlertQueueConfig {
 
     public static final String QUEUE_NAME = "alert-queue";
 
@@ -23,8 +23,8 @@ public class RabbitMQConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    @Bean(name="alertRabbitTemplate")
+    public RabbitTemplate alertRabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
         template.setMessageConverter(jsonMessageConverter());
         return template;

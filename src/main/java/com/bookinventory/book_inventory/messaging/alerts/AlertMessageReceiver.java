@@ -1,4 +1,4 @@
-package com.bookinventory.book_inventory.messaging;
+package com.bookinventory.book_inventory.messaging.alerts;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +8,11 @@ import com.bookinventory.book_inventory.model.LowStockAlertEntity;
 import com.bookinventory.book_inventory.service.AlertService;
 
 @Component
-public class MessageReceiver {
+public class AlertMessageReceiver {
     @Autowired
     private AlertService alertService;
     
-    @RabbitListener(queues = RabbitMQConfig.QUEUE_NAME)
+    @RabbitListener(queues = RabbitMQAlertQueueConfig.QUEUE_NAME)
     public void receive(LowStockAlertEntity lowStockAlertEntity) {
         System.out.println("Received: " + lowStockAlertEntity.getMessage());
         alertService.saveAlertMessage(lowStockAlertEntity);

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bookinventory.book_inventory.dto.alerts.AlertsDTO;
+import com.bookinventory.book_inventory.dto.messagequeues.AlertsDTO;
 import com.bookinventory.book_inventory.model.LowStockAlertEntity;
 import com.bookinventory.book_inventory.repository.LowStockAlertRepository;
 

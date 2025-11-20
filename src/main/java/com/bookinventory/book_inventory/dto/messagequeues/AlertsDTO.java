@@ -1,4 +1,4 @@
-package com.bookinventory.book_inventory.dto.alerts;
+package com.bookinventory.book_inventory.dto.messagequeues;
 
 import java.time.LocalDateTime;
 
@@ -16,5 +16,4 @@ public class AlertsDTO {
     String bookTitle;
     String message;
     LocalDateTime createdAt;
-    
 }

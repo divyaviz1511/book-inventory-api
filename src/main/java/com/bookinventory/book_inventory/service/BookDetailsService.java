@@ -17,7 +17,7 @@ import jakarta.persistence.criteria.Predicate;
 import com.bookinventory.book_inventory.dto.*;
 import com.bookinventory.book_inventory.dto.filter.SearchRequest;
 import com.bookinventory.book_inventory.exceptions.ResourceNotFoundException;
-import com.bookinventory.book_inventory.messaging.MessageSender;
+import com.bookinventory.book_inventory.messaging.alerts.AlertMessageSender;
 
 @Service
 public class BookDetailsService {
@@ -25,7 +25,7 @@ public class BookDetailsService {
     private BookDetailsRepository bookDetailsRepository;
 
     @Autowired
-    private MessageSender messageSender;
+    private AlertMessageSender messageSender;
 
     @Autowired
     private AIService aiService;
@@ -38,11 +38,11 @@ public class BookDetailsService {
         }
 
         //get probability for the list of books
-        List<Double> prob = aiService.getBestSellerProbabilities(bookDetails);
+        /*List<Double> prob = aiService.getBestSellerProbabilities(bookDetails);
 
         for(int i=0; i<bookDetailsResponses.size(); i++) {
             bookDetailsResponses.get(i).setBestSellerProbability(prob.get(i));
-        }
+        }*/
 
         return bookDetailsResponses;
     }

@@ -1,6 +1,7 @@
 package com.bookinventory.book_inventory.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookinventory.book_inventory.dto.BookDetailsRequest;
 import com.bookinventory.book_inventory.dto.BookDetailsResponse;
-import com.bookinventory.book_inventory.dto.alerts.AlertsDTO;
 import com.bookinventory.book_inventory.dto.filter.SearchRequest;
+import com.bookinventory.book_inventory.dto.messagequeues.AlertsDTO;
+import com.bookinventory.book_inventory.dto.messagequeues.BookEventDTO;
+import com.bookinventory.book_inventory.messaging.events.BookEventsSender;
 import com.bookinventory.book_inventory.service.AlertService;
 import com.bookinventory.book_inventory.service.BookDetailsService;
 
@@ -32,6 +35,9 @@ public class BookDetailsRestController {
 
     @Autowired
     private AlertService alertService;
+
+    @Autowired
+    private BookEventsSender bookEventsSender;
 
     @GetMapping
     public List<BookDetailsResponse> getAllBookDetails() {
@@ -48,18 +54,21 @@ public class BookDetailsRestController {
     public ResponseEntity<BookDetailsResponse> addBookDetails(@RequestBody BookDetailsRequest bookDetailsRequest) {
         BookDetailsResponse bookDetailsResponse = this.bookDetailsService.addBookDetails(bookDetailsRequest);
         URI location = URI.create("/api/book_details/" + bookDetailsResponse.getId());
+        bookEventsSender.eventSend( "book.added", new BookEventDTO("book.added", bookDetailsResponse.getId(), LocalDate.now()));
         return ResponseEntity.created(location).body(bookDetailsResponse);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<BookDetailsResponse> updateBookDetails(@PathVariable int id, @RequestBody BookDetailsRequest bookDetailsRequest) {
         BookDetailsResponse bookDetailsResponse = bookDetailsService.updateBookDetailsById(id, bookDetailsRequest);
+        bookEventsSender.eventSend("book.updated", new BookEventDTO("book.updated", id, LocalDate.now()));
         return ResponseEntity.ok(bookDetailsResponse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookDetailById(@PathVariable int id) {
         bookDetailsService.deleteBookDetailById(id);
+        bookEventsSender.eventSend("book.deleted", new BookEventDTO("book.deleted", id, LocalDate.now()));
         return ResponseEntity.noContent().build();
     }
 
