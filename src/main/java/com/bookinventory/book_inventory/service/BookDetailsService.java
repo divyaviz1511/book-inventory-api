@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +34,17 @@ public class BookDetailsService {
     @Autowired
     private AIService aiService;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Autowired
+    @Qualifier("redisCacheManager")
+    private CacheManager redisCacheManager;
+
+
+    @Cacheable(value="allBooks", cacheManager = "redisCacheManager")
     public List<BookDetailsResponse> getAllBookDetails() {
+        System.out.println("[CACHE TEST] Fetching all books from DB...");
         List<BookDetailsResponse> bookDetailsResponses = new ArrayList<>();
         List<BookDetails> bookDetails = bookDetailsRepository.findAll();
         for(BookDetails bookDetail : bookDetails) {
@@ -47,12 +61,15 @@ public class BookDetailsService {
         return bookDetailsResponses;
     }
 
+    @Cacheable(value="bookById", key = "#id")
     public BookDetailsResponse getBookDetailsById(int id) {
+        System.out.println("[CACHE TEST] Fetching all books from DB...");
         BookDetails bookDetails = bookDetailsRepository.findById(id)
             .orElseThrow(()-> new ResourceNotFoundException("Book with id: " + id + " not found!"));
         return this.getBookDetailResponseFromBookDetailEntity(bookDetails);
     }
 
+    @CacheEvict(value="allBooks", cacheManager = "redisCacheManager", allEntries = true)
     public BookDetailsResponse addBookDetails(BookDetailsRequest bookDetailsRequest) {
         BookDetails bookDetails = this.getBookDetailsEntityFromBookDetailsRequestDTO(bookDetailsRequest);
         return getBookDetailResponseFromBookDetailEntity(bookDetailsRepository.save(bookDetails));
@@ -70,6 +87,9 @@ public class BookDetailsService {
                 String message = "Low Stock Alert ! Book with id: " + bookDetails.getBook_id() + " and title: " + bookDetails.getTitle() + " is low in stock (only " + bookDetails.getQuantity() + " left)";
                 LowStockAlertEntity alert = new LowStockAlertEntity(bookDetails.getBook_id() , bookDetails.getTitle(), message);
                 messageSender.send(alert);
+                
+                //Set cache right
+                cacheManager.getCache("allAlerts").clear();
             }
         }
         if (bookDetailsRequest.getLanguage() != null) bookDetails.setLanguage(bookDetailsRequest.getLanguage());
@@ -78,12 +98,21 @@ public class BookDetailsService {
         if (bookDetailsRequest.getReleasedDate() != null) bookDetails.setReleasedDate(bookDetailsRequest.getReleasedDate());
 
         bookDetailsRepository.save(bookDetails);
+
+        //Set caches right
+        redisCacheManager.getCache("allBooks").clear();
+        cacheManager.getCache("bookById").evict(bookDetails.getBook_id());
+
         return this.getBookDetailResponseFromBookDetailEntity(bookDetails);
     }
 
     public void deleteBookDetailById(int id) {
         BookDetails bookDetails = bookDetailsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book Id: " + id + " not found"));
         bookDetailsRepository.delete(bookDetails);
+
+        //Set caches right
+        cacheManager.getCache("allBooks").clear();
+        cacheManager.getCache("bookById").evict(bookDetails.getBook_id());
     }
 
     private Specification<BookDetails> filterBy(SearchRequest searchRequest) {

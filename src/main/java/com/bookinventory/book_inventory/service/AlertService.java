@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.bookinventory.book_inventory.dto.messagequeues.AlertsDTO;
@@ -19,6 +20,7 @@ public class AlertService {
         lowStockAlertRepository.save(lowStockAlertEntity);
     }
 
+    @Cacheable(value="allAlerts")
     public List<AlertsDTO> getAllAlerts() {
         List<AlertsDTO> alerts = new ArrayList<>();
         List<LowStockAlertEntity> alertEntities = lowStockAlertRepository.findAll();
